@@ -1,13 +1,16 @@
-var http = require('http'),
-    path = require('path'),
-    methods = require('methods'),
-    express = require('express'),
-    bodyParser = require('body-parser'),
-    session = require('express-session'),
-    cors = require('cors'),
-    passport = require('passport'),
-    errorhandler = require('errorhandler'),
-    mongoose = require('mongoose');
+import express from 'express';
+import session from 'session';
+import cors from 'cors';
+import errorhandler from 'errorhandler';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import methodOverride from 'method-override';
+
+import './models/User';
+import './models/Article';
+import './models/Comment';
+import './config/passport';
+
 
 var isProduction = process.env.NODE_ENV === 'production';
 
@@ -17,9 +20,9 @@ var app = express();
 app.use(cors());
 
 // Normal express config defaults
-app.use(require('morgan')('dev'));
+app.use(morgan('dev'));
 
-app.use(require('method-override')());
+app.use(methodOverride());
 app.use(express.static(__dirname + '/public'));
 
 app.use(session({ secret: 'conduit', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false  }));
@@ -35,10 +38,6 @@ if(isProduction){
   mongoose.set('debug', true);
 }
 
-require('./models/User');
-require('./models/Article');
-require('./models/Comment');
-require('./config/passport');
 
 
 /// catch 404 and forward to error handler
