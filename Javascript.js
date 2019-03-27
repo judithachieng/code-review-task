@@ -38,13 +38,10 @@ app.use(
   })
 );
 
-if (!isProduction) {
-  app.use(errorhandler());
-}
-
 if (isProduction) {
   mongoose.connect(process.env.MONGODB_URI);
 } else {
+  app.use(errorhandler());
   mongoose.connect('mongodb://localhost/conduit');
   mongoose.set('debug', true);
 }
